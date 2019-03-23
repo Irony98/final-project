@@ -106,7 +106,7 @@ public class StepService extends Service implements SensorEventListener {
 
     private void initTodayData() {
         CURRENT_DATE = getTodayDate();
-        DbUtils.createDb(this, "DylanStepCount");
+        DbUtils.createDb(this, "WalkerStepCountDB");
         DbUtils.getLiteOrm().setDebugged(false);
         //获取当天的数据，用于展示
         List<StepData> list = DbUtils.getQueryByWhere(StepData.class, "today", new String[]{CURRENT_DATE});
@@ -198,7 +198,7 @@ public class StepService extends Service implements SensorEventListener {
 
     private void isCall() {
         String time = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("achieveTime", "21:00");
-        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000");
+        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "10000");
         String remind = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("remind", "1");
         Logger.d("time=" + time + "\n" +
                 "new SimpleDateFormat(\"HH: mm\").format(new Date()))=" + new SimpleDateFormat("HH:mm").format(new Date()));
@@ -311,10 +311,8 @@ public class StepService extends Service implements SensorEventListener {
         if (sensorManager != null) {
             sensorManager = null;
         }
-        // 获取传感器管理器的实例
         sensorManager = (SensorManager) this
                 .getSystemService(SENSOR_SERVICE);
-        //android4.4以后可以使用计步传感器
         int VERSION_CODES = Build.VERSION.SDK_INT;
         if (VERSION_CODES >= 19) {
             addCountStepListener();

@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         sp = new SharedPreferencesUtils(this);
-        //获取用户设置的计划锻炼步数，没有设置过的话默认7000
-        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+        //获取用户设置的计划锻炼步数，没有设置过的话默认10000
+        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
         //设置当前步数为0
         cc.setCurrentCount(Integer.parseInt(planWalk_QTY), 0);
         dd.setCurrentCount(0);
@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             StepService stepService = ((StepService.StepBinder) service).getService();
             //设置初始化数据
-            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
             cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepService.getStepCount());
             dd.setCurrentCount(stepService.getStepCount());
             //设置步数监听回调
             stepService.registerCallback(new UpdateUiCallBack() {
                 @Override
                 public void updateUi(int stepCount) {
-                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
                     cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepCount);
                     dd.setCurrentCount(stepCount);
                 }
