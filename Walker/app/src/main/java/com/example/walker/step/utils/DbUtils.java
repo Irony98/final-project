@@ -7,6 +7,9 @@ import com.litesuits.orm.db.assit.WhereBuilder;
 import com.litesuits.orm.db.model.ConflictAlgorithm;
 
 import java.util.List;
+/**
+ * Created by dylan on 2016/1/31.
+ */
 public class DbUtils {
 
     public static String DB_NAME;
