@@ -247,16 +247,16 @@ public class StepService extends Service implements SensorEventListener {
         Intent hangIntent = new Intent(this, MainActivity.class);
         PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000");
+        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "10000");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle("Today step " + CURRENT_STEP)
                 .setContentText((Integer.valueOf(plan) - CURRENT_STEP) + " steps to reach your goal, come on!")
                 .setContentIntent(hangPendingIntent)
                 .setTicker(getResources().getString(R.string.app_name) + "You should start to exercise!")
-                .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
-                .setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
-                .setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
-                .setOngoing(false)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
+                .setWhen(System.currentTimeMillis())
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setAutoCancel(true)
+                .setOngoing(false)
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .setSmallIcon(R.mipmap.app_icon);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
