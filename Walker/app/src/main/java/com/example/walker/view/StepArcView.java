@@ -104,7 +104,7 @@ public class StepArcView extends View {
         vTextPaint.setColor(getResources().getColor(R.color.red));
         Rect bounds_Number = new Rect();
         vTextPaint.getTextBounds(stepNumber, 0, stepNumber.length(), bounds_Number);
-        canvas.drawText(stepNumber, centerX, getHeight() / 2 + bounds_Number.height() / 2, vTextPaint);
+        canvas.drawText(stepNumber, centerX, getHeight() / 10*4 + bounds_Number.height() / 2, vTextPaint);
 
     }
 

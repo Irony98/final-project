@@ -21,6 +21,10 @@ android {
             jniLibs.srcDir 'libs'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -33,4 +37,6 @@ dependencies {
     implementation files('libs/lite-orm-1.7.0.jar')
     implementation 'com.orhanobut:logger:1.8'
     implementation files('libs/BaiduLBS_Android.jar')
+    implementation "io.reactivex.rxjava2:rxjava:2.1.2"
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }

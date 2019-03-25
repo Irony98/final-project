@@ -90,13 +90,13 @@ public class StepService extends Service implements SensorEventListener {
     private void initNotification() {
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(getResources().getString(R.string.app_name))
-                .setContentText("今日步数" + CURRENT_STEP + " 步")
+                .setContentText("Today steps" + CURRENT_STEP)
                 .setContentIntent(getDefalutIntent(Notification.FLAG_ONGOING_EVENT))
-                .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
-                .setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
-                .setAutoCancel(false)//设置这个标志当用户单击面板就可以让通知将自动取消
-                .setOngoing(true)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
-                .setSmallIcon(R.mipmap.logo);
+                .setWhen(System.currentTimeMillis())//The time of the notification will be displayed in the notification bar
+                .setPriority(Notification.PRIORITY_DEFAULT)//set priority
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .setSmallIcon(R.mipmap.app_icon);
         Notification notification = mBuilder.build();
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         startForeground(notifyId_Step, notification);
@@ -106,9 +106,9 @@ public class StepService extends Service implements SensorEventListener {
 
     private void initTodayData() {
         CURRENT_DATE = getTodayDate();
-        DbUtils.createDb(this, "DylanStepCount");
+        DbUtils.createDb(this, "StepCount");
         DbUtils.getLiteOrm().setDebugged(false);
-        //获取当天的数据，用于展示
+        //get today's data
         List<StepData> list = DbUtils.getQueryByWhere(StepData.class, "today", new String[]{CURRENT_DATE});
         if (list.size() == 0 || list.isEmpty()) {
             CURRENT_STEP = 0;
@@ -116,7 +116,7 @@ public class StepService extends Service implements SensorEventListener {
             Log.v(TAG, "StepData=" + list.get(0).toString());
             CURRENT_STEP = Integer.parseInt(list.get(0).getStep());
         } else {
-            Log.v(TAG, "出错了！");
+            Log.v(TAG, "wrong！");
         }
         if (mStepCount != null) {
             mStepCount.setSteps(CURRENT_STEP);
@@ -134,10 +134,6 @@ public class StepService extends Service implements SensorEventListener {
         // 屏幕亮屏广播
         filter.addAction(Intent.ACTION_SCREEN_ON);
         // 屏幕解锁广播
-//        filter.addAction(Intent.ACTION_USER_PRESENT);
-        // 当长按电源键弹出“关机”对话或者锁屏时系统会发出这个广播
-        // example：有时候会用到系统对话框，权限可能很高，会覆盖在锁屏界面或者“关机”对话框之上，
-        // 所以监听这个广播，当收到时就隐藏自己的对话，如点击pad右下角部分弹出的对话框
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         //监听日期变化
         filter.addAction(Intent.ACTION_DATE_CHANGED);
@@ -152,32 +148,29 @@ public class StepService extends Service implements SensorEventListener {
                     Log.d(TAG, "screen on");
                 } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                     Log.d(TAG, "screen off");
-                    //改为60秒一存储
+                    //save every 60s
                     duration = 60000;
                 } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
                     Log.d(TAG, "screen unlock");
-//                    save();
-                    //改为30秒一存储
+                    //save();
+                    //save every 30s
                     duration = 30000;
                 } else if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(intent.getAction())) {
                     Log.i(TAG, " receive Intent.ACTION_CLOSE_SYSTEM_DIALOGS");
-                    //保存一次
+                    //save once
                     save();
                 } else if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
                     Log.i(TAG, " receive ACTION_SHUTDOWN");
                     save();
-                } else if (Intent.ACTION_DATE_CHANGED.equals(action)) {//日期变化步数重置为0
-//                    Logger.d("重置步数" + StepDcretor.CURRENT_STEP);
+                } else if (Intent.ACTION_DATE_CHANGED.equals(action)) {
                     save();
                     isNewDay();
                 } else if (Intent.ACTION_TIME_CHANGED.equals(action)) {
-                    //时间变化步数重置为0
                     isCall();
                     save();
                     isNewDay();
-                } else if (Intent.ACTION_TIME_TICK.equals(action)) {//日期变化步数重置为0
+                } else if (Intent.ACTION_TIME_TICK.equals(action)) {
                     isCall();
-//                    Logger.d("重置步数" + StepDcretor.CURRENT_STEP);
                     save();
                     isNewDay();
                 }
@@ -221,13 +214,12 @@ public class StepService extends Service implements SensorEventListener {
 
 
     private void updateNotification() {
-        //设置点击跳转
         Intent hangIntent = new Intent(this, MainActivity.class);
         PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Notification notification = mBuilder.setContentTitle(getResources().getString(R.string.app_name))
-                .setContentText("今日步数" + CURRENT_STEP + " 步")
-                .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
+                .setContentText("Today step " + CURRENT_STEP)
+                .setWhen(System.currentTimeMillis())
                 .setContentIntent(hangPendingIntent)
                 .build();
         mNotificationManager.notify(notifyId_Step, notification);
@@ -252,24 +244,21 @@ public class StepService extends Service implements SensorEventListener {
 
 
     private void remindNotify() {
-
-        //设置点击跳转
         Intent hangIntent = new Intent(this, MainActivity.class);
         PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setContentTitle("今日步数" + CURRENT_STEP + " 步")
-                .setContentText("距离目标还差" + (Integer.valueOf(plan) - CURRENT_STEP) + "步，加油！")
+        mBuilder.setContentTitle("Today step " + CURRENT_STEP)
+                .setContentText((Integer.valueOf(plan) - CURRENT_STEP) + " steps to reach your goal, come on!")
                 .setContentIntent(hangPendingIntent)
-                .setTicker(getResources().getString(R.string.app_name) + "提醒您开始锻炼了")//通知首次出现在通知栏，带上升动画效果的
+                .setTicker(getResources().getString(R.string.app_name) + "You should start to exercise!")
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
                 .setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
                 .setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
                 .setOngoing(false)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
-                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
-                //Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
-                .setSmallIcon(R.mipmap.logo);
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                .setSmallIcon(R.mipmap.app_icon);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.notify(notify_remind_id, mBuilder.build());
     }
@@ -311,10 +300,8 @@ public class StepService extends Service implements SensorEventListener {
         if (sensorManager != null) {
             sensorManager = null;
         }
-        // 获取传感器管理器的实例
         sensorManager = (SensorManager) this
                 .getSystemService(SENSOR_SERVICE);
-        //android4.4以后可以使用计步传感器
         int VERSION_CODES = Build.VERSION.SDK_INT;
         if (VERSION_CODES >= 19) {
             addCountStepListener();
@@ -345,20 +332,14 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (stepSensorType == Sensor.TYPE_STEP_COUNTER) {
-            //获取当前传感器返回的临时步数
             int tempStep = (int) event.values[0];
-            //首次如果没有获取手机系统中已有的步数则获取一次系统中APP还未开始记步的步数
             if (!hasRecord) {
                 hasRecord = true;
                 hasStepCount = tempStep;
             } else {
-                //获取APP打开到现在的总步数=本次系统回调的总步数-APP打开之前已有的步数
                 int thisStepCount = tempStep - hasStepCount;
-                //本次有效步数=（APP打开后所记录的总步数-上一次APP打开后所记录的总步数）
                 int thisStep = thisStepCount - previousStepCount;
-                //总步数=现有的步数+本次有效步数
                 CURRENT_STEP += (thisStep);
-                //记录最后一次APP打开到现在的总步数
                 previousStepCount = thisStepCount;
             }
             Logger.d("tempStep" + tempStep);
@@ -374,8 +355,6 @@ public class StepService extends Service implements SensorEventListener {
     private void addBasePedometerListener() {
         mStepCount = new StepCount();
         mStepCount.setSteps(CURRENT_STEP);
-        // 获得传感器的类型，这里获得的类型是加速度传感器
-        // 此方法用来注册，只有注册过才会生效，参数：SensorEventListener的实例，Sensor的实例，更新速率
         Sensor sensor = sensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         boolean isAvailable = sensorManager.registerListener(mStepCount.getStepDetector(), sensor,
@@ -408,7 +387,6 @@ public class StepService extends Service implements SensorEventListener {
 
         @Override
         public void onFinish() {
-            // 如果计时器正常结束，则开始计步
             time.cancel();
             save();
             startTimeCount();
@@ -443,11 +421,10 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //取消前台进程
         stopForeground(true);
         DbUtils.closeDb();
         unregisterReceiver(mBatInfoReceiver);
-        Logger.d("stepService关闭");
+        Logger.d("stepService closed");
     }
 
     @Override

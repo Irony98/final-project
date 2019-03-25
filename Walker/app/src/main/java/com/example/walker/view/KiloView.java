@@ -127,10 +127,10 @@ public class KiloView extends View {
     }
 
     public void setCurrentCount(int currentCount){
-        float show_kilo=currentCount*0.001304f;
+        float show_kilo=currentCount*0.0008176f;
         DecimalFormat   f  =   new DecimalFormat("##0.0");
         kilo=f.format(show_kilo);
-        calory=String.valueOf((int)(currentCount*0.10628f));
+        calory=String.valueOf((int)(currentCount*0.05628f));
         invalidate();
     }
 

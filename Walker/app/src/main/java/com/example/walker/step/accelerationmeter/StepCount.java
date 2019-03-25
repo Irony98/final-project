@@ -33,8 +33,8 @@ public class StepCount implements StepCountListener {
                 this.mCount++;
                 notifyListener();
             }
-        } else {//超时
-            this.count = 1;//为1,不是0
+        } else {
+            this.count = 1;
         }
 
     }

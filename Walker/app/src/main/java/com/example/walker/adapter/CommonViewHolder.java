@@ -9,12 +9,12 @@ public class CommonViewHolder {
         SparseArray<View> viewHolder = (SparseArray<View>) view.getTag();
         if (viewHolder == null) {
             viewHolder = new SparseArray<View>();
-            view.setTag(viewHolder);//创建集合和根View关联
+            view.setTag(viewHolder);
         }
         View chidlView = viewHolder.get(id);
         if (chidlView == null) {
             chidlView = view.findViewById(id);
-            viewHolder.put(id, chidlView);//保存到集合
+            viewHolder.put(id, chidlView);
         }
         return (T) chidlView;
     }

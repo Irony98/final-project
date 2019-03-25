@@ -54,14 +54,14 @@ public class SetPlanActivity extends AppCompatActivity implements View.OnClickLi
         addListener();
     }
 
-    public void initData() {//获取锻炼计划
+    public void initData() {//get step goal
         sp = new SharedPreferencesUtils(this);
-        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
         String remind = (String) sp.getParam("remind", "1");
         String achieveTime = (String) sp.getParam("achieveTime", "20:00");
         if (!planWalk_QTY.isEmpty()) {
             if ("0".equals(planWalk_QTY)) {
-                tv_step_number.setText("7000");
+                tv_step_number.setText("10000");
             } else {
                 tv_step_number.setText(planWalk_QTY);
             }
@@ -106,7 +106,7 @@ public class SetPlanActivity extends AppCompatActivity implements View.OnClickLi
 
     private void save() {
         walk_qty = tv_step_number.getText().toString().trim();
-//        remind = "";
+//        remin
         if (cb_remind.isChecked()) {
             remind = "1";
         } else {
@@ -135,16 +135,6 @@ public class SetPlanActivity extends AppCompatActivity implements View.OnClickLi
         int minute = calendar.get(Calendar.MINUTE);
 //        String time = tv_remind_time.getText().toString().trim();
         final DateFormat df = new SimpleDateFormat("HH:mm");
-//        Date date = null;
-//        try {
-//            date = df.parse(time);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (null != date) {
-//            calendar.setTime(date);
-//        }
         new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

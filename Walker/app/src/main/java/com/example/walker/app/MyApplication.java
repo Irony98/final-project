@@ -6,6 +6,8 @@ import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 
 public class MyApplication extends Application {
+    private   static Application instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -15,4 +17,9 @@ public class MyApplication extends Application {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
     }
+
+    public static Application getInstance() {
+        return instance;
+    }
+
 }

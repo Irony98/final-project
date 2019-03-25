@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import com.example.walker.R;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_set;
     private TextView tv_isSupport;
     private SharedPreferencesUtils sp;
+    private boolean isBind = false;
 
     private void assignViews() {
         tv_data = (TextView) findViewById(R.id.tv_data);
@@ -47,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void initData() {
         sp = new SharedPreferencesUtils(this);
-        //获取用户设置的计划锻炼步数，没有设置过的话默认7000
-        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-        //设置当前步数为0
+        //get plan, set default goal 10000
+        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
+        //set current step zero.
         cc.setCurrentCount(Integer.parseInt(planWalk_QTY), 0);
         dd.setCurrentCount(0);
         tv_isSupport.setText("Counting...");
@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean isBind = false;
-
-    /**
-     * 开启计步服务
-     */
     private void setupService() {
         Intent intent = new Intent(this, StepService.class);
         isBind = bindService(intent, conn, Context.BIND_AUTO_CREATE);
@@ -77,11 +72,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             StepService stepService = ((StepService.StepBinder) service).getService();
-            //设置初始化数据
-            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
             cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepService.getStepCount());
             dd.setCurrentCount(stepService.getStepCount());
-            //设置步数监听回调
             stepService.registerCallback(new UpdateUiCallBack() {
                 @Override
                 public void updateUi(int stepCount) {

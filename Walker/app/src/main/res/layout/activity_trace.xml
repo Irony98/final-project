@@ -1,31 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.TraceActivity">
+    android:orientation="vertical"
+    tools:context="com.example.walker.activity.TraceActivity">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
+
+    <RelativeLayout
+        android:id="@+id/rl_map_view"
         android:layout_width="match_parent"
-        android:layout_height="800dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/back_button"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/back_button"
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/iv_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/icon_position" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_times"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="时长："
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="距离 ："
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="配速："
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_calorie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="卡路里："
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_heart_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="心率 ："
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_hour_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="时速 ："
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.0"
+        android:orientation="horizontal" >
+        <ListView
+            android:id="@+id/lv_location"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:visibility="gone"
+            android:background="@color/grey" >
+        </ListView>
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="0dp"
-        android:background="#EE2C2C"
-        android:text="Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-         />
+        android:background="@color/grey"
+        android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start"
+            android:background="@color/yellow"/>
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/btn_pause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="Pause"
+            android:background="@color/yellow"/>
+
+        <Button
+            android:id="@+id/btn_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="End"
+            android:visibility="gone"
+            android:background="@color/yellow"/>
+    </LinearLayout>
+</LinearLayout>
