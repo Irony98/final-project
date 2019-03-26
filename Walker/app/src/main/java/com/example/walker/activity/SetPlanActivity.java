@@ -114,7 +114,7 @@ public class SetPlanActivity extends AppCompatActivity implements View.OnClickLi
         }
         achieveTime = tv_remind_time.getText().toString().trim();
         if (walk_qty.isEmpty() || "0".equals(walk_qty)) {
-            sp.setParam("planWalk_QTY", "7000");
+            sp.setParam("planWalk_QTY", "10000");
         } else {
             sp.setParam("planWalk_QTY", walk_qty);
         }

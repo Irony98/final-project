@@ -37,7 +37,6 @@ dependencies {
     implementation files('libs/lite-orm-1.7.0.jar')
     implementation 'com.orhanobut:logger:1.8'
     implementation files('libs/BaiduLBS_Android.jar')//API of BaiduMap
-    //implementation "io.reactivex.rxjava2:rxjava:2.1.2"
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 //The framework used to manage dynamic permissions in upper version of Android 6.0
 

@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             stepService.registerCallback(new UpdateUiCallBack() {
                 @Override
                 public void updateUi(int stepCount) {
-                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "10000");
                     cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepCount);
                     dd.setCurrentCount(stepCount);
                 }
